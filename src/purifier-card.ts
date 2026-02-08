@@ -32,13 +32,6 @@ console.info(
   'color: blue; background: white; font-weight: 700;',
 );
 
-if (!customElements.get('ha-icon-button')) {
-  customElements.define(
-    'ha-icon-button',
-    class extends (customElements.get('paper-icon-button') ?? HTMLElement) {},
-  );
-}
-
 const SUPPORT_PRESET_MODE = 8;
 @customElement('purifier-card')
 export class PurifierCard extends LitElement {
@@ -46,6 +39,7 @@ export class PurifierCard extends LitElement {
 
   @state() private config!: PurifierCardConfig;
   @state() private requestInProgress = false;
+  @state() private presetModeOpen = false;
 
   public static get styles(): CSSResultGroup {
     return styles;
@@ -130,10 +124,22 @@ export class PurifierCard extends LitElement {
     }
   }
 
-  private handlePresetMode(event: PointerEvent) {
-    const preset_mode = (<HTMLDivElement>event.target).getAttribute('value');
-    this.callService('fan.set_preset_mode', { preset_mode });
+  private handlePresetMode(preset_mode: string) {
+    if (preset_mode) {
+      this.presetModeOpen = false;
+      this.callService('fan.set_preset_mode', { preset_mode });
+    }
   }
+
+  private togglePresetMode(e: Event) {
+    e.stopPropagation();
+    this.presetModeOpen = !this.presetModeOpen;
+  }
+
+  private closePresetMode = (e: Event) => {
+    e.stopPropagation();
+    this.presetModeOpen = false;
+  };
 
   private handlePercentage(event: CustomEvent<SliderValue>) {
     const percentage = event.detail.value;
@@ -154,30 +160,38 @@ export class PurifierCard extends LitElement {
       return nothing;
     }
 
-    const selected = preset_modes.indexOf(preset_mode);
+    const selectedLabel =
+      localize(`preset_mode.${preset_mode.toLowerCase()}`) || preset_mode;
 
     return html`
-      <div class="preset-mode">
-        <ha-button-menu @click="${(e: PointerEvent) => e.stopPropagation()}">
-          <mmp-icon-button slot="trigger">
-            <ha-icon icon="mdi:fan"></ha-icon>
-            <span>
-              ${localize(`preset_mode.${preset_mode}`) || preset_mode}
-            </span>
-          </mmp-icon-button>
-
-          ${preset_modes.map(
-            (item, index) => html`
-              <mwc-list-item
-                ?activated=${selected === index}
-                value=${item}
-                @click=${(e: PointerEvent) => this.handlePresetMode(e)}
-              >
-                ${localize(`preset_mode.${item.toLowerCase()}`) || item}
-              </mwc-list-item>
-            `,
-          )}
-        </ha-button-menu>
+      <div class="preset-mode" @click=${(e: Event) => e.stopPropagation()}>
+        <button class="preset-mode-trigger" @click=${this.togglePresetMode}>
+          <ha-icon icon="mdi:fan"></ha-icon>
+          <span>${selectedLabel}</span>
+          <ha-icon class="preset-mode-arrow" icon="mdi:menu-down"></ha-icon>
+        </button>
+        ${this.presetModeOpen
+          ? html`
+              <div class="dropdown-overlay" @click=${this.closePresetMode}></div>
+              <div class="dropdown-menu">
+                ${preset_modes.map(
+                  (item) => html`
+                    <button
+                      class="dropdown-item ${item === preset_mode ? 'active' : ''}"
+                      @click=${() => this.handlePresetMode(item)}
+                    >
+                      <ha-icon
+                        class="dropdown-check"
+                        icon="mdi:check"
+                        style="visibility: ${item === preset_mode ? 'visible' : 'hidden'}"
+                      ></ha-icon>
+                      ${localize(`preset_mode.${item.toLowerCase()}`) || item}
+                    </button>
+                  `,
+                )}
+              </div>
+            `
+          : nothing}
       </div>
     `;
   }
@@ -274,10 +288,9 @@ export class PurifierCard extends LitElement {
         <span class="state-text" alt=${localizedState}>
           ${localizedState}
         </span>
-        <ha-circular-progress
-          .indeterminate=${this.requestInProgress}
-          size="small"
-        ></ha-circular-progress>
+        ${this.requestInProgress
+          ? html`<ha-spinner class="state-spinner" size="tiny"></ha-spinner>`
+          : nothing}
       </div>
     `;
   }

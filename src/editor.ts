@@ -64,7 +64,7 @@ export class PurifierCardEditor extends LitElement {
           >
             ${fanEntities.map(
               (entity) =>
-                html`<mwc-list-item .value=${entity}>${entity}</mwc-list-item>`,
+                html`<ha-list-item .value=${entity}>${entity}</ha-list-item>`,
             )}
           </ha-select>
         </div>

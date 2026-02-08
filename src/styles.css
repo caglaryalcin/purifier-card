@@ -53,8 +53,100 @@ ha-card {
   }
 }
 
+.preset-mode {
+  position: relative;
+}
+
 .preset-mode ha-icon {
   display: inline-block;
+}
+
+.preset-mode-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: 0;
+  color: var(--pc-secondary-text-color);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+  padding: 0;
+}
+
+.preset-mode-trigger ha-icon {
+  --mdc-icon-size: 18px;
+}
+
+.preset-mode-trigger:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.preset-mode-arrow {
+  --mdc-icon-size: 18px;
+}
+
+.dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  min-width: 120px;
+  margin-top: 4px;
+  padding: var(--ha-space-1, 4px);
+  border: solid var(--ha-border-width-sm, 1px) var(--ha-color-border-neutral-quiet, var(--divider-color));
+  border-radius: var(--ha-border-radius-md, 8px);
+  background: rgba(0, 0, 0, 0.02);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  box-shadow: var(--ha-box-shadow-m, 0 4px 8px 0 rgba(0, 0, 0, 0.2));
+  overflow: auto;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--ha-border-radius-md, 8px);
+  color: var(--primary-text-color);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--ha-font-size-m, 14px);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item.active {
+  color: var(--primary-color);
+}
+
+.dropdown-check {
+  --mdc-icon-size: 16px;
+  flex-shrink: 0;
+}
+
+.dropdown-item.active .dropdown-check {
+  color: var(--primary-color);
 }
 
 .more-info {
@@ -158,8 +250,8 @@ ha-card {
   margin-left: calc(28px + var(--pc-spacing)); /* size + margin of spinner */
 }
 
-.state mwc-circular-progress {
-  --mdc-theme-primary: var(--pc-secondary-text-color) !important;
+.state .state-spinner {
+  --ha-spinner-color: var(--pc-secondary-text-color);
   margin-left: var(--pc-spacing);
 }
 
@@ -235,7 +327,7 @@ ha-icon {
   opacity: 1;
 }
 
-.toolbar paper-button {
+.toolbar ha-button {
   color: var(--pc-toolbar-icon-color);
   flex-direction: column;
   margin-right: 10px;
@@ -244,12 +336,12 @@ ha-icon {
 }
 
 .toolbar ha-icon-button:active,
-.toolbar paper-button:active {
+.toolbar ha-button:active {
   opacity: 0.4;
   background: rgba(0, 0, 0, 0.1);
 }
 
-.toolbar paper-button {
+.toolbar ha-button {
   color: var(--pc-toolbar-icon-color);
   flex-direction: row;
 }
