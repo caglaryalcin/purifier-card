@@ -212,6 +212,10 @@ ha-card {
   pointer-events: none;
 }
 
+.image-overlay {
+  z-index: 1;
+}
+
 .preview.not-available {
   filter: grayscale(1);
 }

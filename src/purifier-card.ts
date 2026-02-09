@@ -236,7 +236,6 @@ export class PurifierCard extends LitElement {
     } = this.entity;
 
     const disabled = state !== 'on';
-    const image = !disabled ? workingImg : standbyImg;
 
     return html`
       <div class="slider">
@@ -248,7 +247,11 @@ export class PurifierCard extends LitElement {
             this.handlePercentage(e)}
         >
         </round-slider>
-        <img src=${image} alt="purifier is ${state}" class="image" />
+        <img src=${standbyImg} alt="purifier is ${state}" class="image" />
+        ${!disabled
+          ? html`<img src=${workingImg} alt="purifier is working" class="image image-overlay" />`
+          : nothing
+        }
         <div class="slider-center">
           <div class="slider-content">${this.renderAQI()}</div>
           <div class="slider-value">
