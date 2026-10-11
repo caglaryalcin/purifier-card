@@ -1,6 +1,6 @@
 {
   "name": "purifier-card",
-  "version": "2.6.3",
+  "version": "1.1.1",
   "description": "Air Purifier card for Home Assistant Lovelace UI",
   "main": "dist/purifier-card.js",
   "scripts": {
@@ -24,6 +24,7 @@
   "author": "Denys Dovhan <denysdovhan@gmail.com> (http://denysdovhan.com/)",
   "license": "MIT",
   "dependencies": {
+    "@thomasloven/round-slider": "0.6.0",
     "@types/lodash": "^4.14.195",
     "custom-card-helpers": "^1.6.4",
     "ha-template": "^1.2.2",

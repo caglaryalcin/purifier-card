@@ -29,7 +29,18 @@ const serverOptions = {
   },
 };
 
+const roundSliderSafeRegistration = replace({
+  include: '**/node_modules/@thomasloven/round-slider/round-slider.js',
+  delimiters: ['', ''],
+  values: {
+    'customElements.define("round-slider", RoundSlider);':
+      'customElements.get("round-slider") || customElements.define("round-slider", RoundSlider);',
+  },
+  preventAssignment: true,
+});
+
 const plugins = [
+  roundSliderSafeRegistration,
   nodeResolve(),
   commonjs(),
   json(),

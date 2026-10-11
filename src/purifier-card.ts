@@ -1,5 +1,6 @@
 import { CSSResultGroup, LitElement, PropertyValues, html, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import '@thomasloven/round-slider';
 import {
   hasConfigOrEntityChanged,
   fireEvent,
